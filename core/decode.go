@@ -950,10 +950,14 @@ func (d *decodeState) literalStore(item []byte, v reflect.Value, fromQuoted bool
 		default:
 			d.saveError(&UnmarshalTypeError{Value: "string", Type: v.Type(), Offset: int64(d.readIndex())})
 		/* #add 2020-02-19 17:53:19 @nimo S */
-		case reflect.Int, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		case reflect.Int, reflect.Uintptr:
 			value , err := strconv.Atoi(string(s))
 			if err != nil {d.saveError(err)}
 			v.SetInt(int64(value))
+		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			value , err := strconv.Atoi(string(s))
+			if err != nil {d.saveError(err)}
+			v.SetUint(uint64(value))
 		case reflect.Float32, reflect.Float64:
 			value , err := strconv.ParseFloat(string(s), 64)
 			if err != nil {d.saveError(err)}

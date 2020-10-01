@@ -1,6 +1,7 @@
 package ogjson
 
 import (
+	gtest "github.com/og/x/test"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"testing"
@@ -37,6 +38,19 @@ func ExampleParse() {
 	Parse(`{"Name":"nimo","Age":27}`, &user)
 }
 
+func TestUint(t *testing.T) {
+	as := gtest.NewAS(t)
+	{
+		type Data struct {
+			Age uint `json:"age"`
+		}
+		data := Data{}
+		Parse(`{"age": "10"}`,&data)
+		as.Equal(data, Data{
+			Age: 10,
+		})
+	}
+}
 var userJSON = `{"Name":"nimo","Age":27}`
 func TestString(t *testing.T) {
 	{
